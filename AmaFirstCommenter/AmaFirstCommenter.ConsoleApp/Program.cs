@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 using VkNet;
 using VkNet.Enums.Filters;
@@ -23,6 +24,7 @@ namespace BtsGovno.ConsoleApp
         private const ulong WallGetOffset = 0;
 
         private const double FreshnessPeriodInMinutes = 2;
+        private const int RequestTimeoutInMilliseconds = 5000;
 
         #endregion Constants
 
@@ -77,7 +79,11 @@ namespace BtsGovno.ConsoleApp
                 {
                     CreateCommentForLatestPost(api, apiConfiguration, latestPost);
                     _processedPosts.Add(latestPost.Id.Value, latestPost);
+
+                    Console.WriteLine($"Comment was added to post with id {latestPost.Id}");
                 }
+
+                Thread.Sleep(RequestTimeoutInMilliseconds);
             }
         }
 
